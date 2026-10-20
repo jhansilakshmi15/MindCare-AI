@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+
+{% block title %}User Dashboard — MindCare AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- Top Greeting & Header -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+            <span class="badge bg-primary-subtle text-primary px-3 py-1 rounded-pill fw-semibold mb-1">
+                <i class="bi bi-clock-history me-1"></i>Session Records
+            </span>
+            <h2 class="fw-bold text-navy mb-0">Personal Screening Dashboard</h2>
+            <p class="text-muted small mb-0">
+                Track your historical screening assessments and self-reported wellness indicators over time.
+            </p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('questionnaire') }}" class="btn btn-mindcare-primary">
+                <i class="bi bi-plus-circle me-1"></i> Take New Screening
+            </a>
+            {% if records %}
+            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteHistoryModal">
+                <i class="bi bi-trash3 me-1"></i> Clear History
+            </button>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Educational Disclaimer Box -->
+    <div class="disclaimer-banner mb-4">
+        <div class="d-flex align-items-start gap-2">
+            <i class="bi bi-info-circle-fill text-primary fs-5 mt-1"></i>
+            <div>
+                <strong>Important Note on Longitudinal Scores:</strong>
+                Variations in scores over time reflect situational changes in your self-reported inputs (such as changing workloads, stress levels, or leave availability). <strong>They do not represent clinical medical improvement or deterioration.</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Summary Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-lg-3">
+            <div class="mc-card p-3">
+                <div class="text-muted small fw-semibold text-uppercase">Total Screenings</div>
+                <div class="fs-2 fw-bold text-navy my-1">{{ total_count }}</div>
+                <div class="text-muted small">Completed in this session</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="mc-card p-3">
+                <div class="text-muted small fw-semibold text-uppercase">Latest Category</div>
+                <div class="fs-5 fw-bold text-navy my-1 text-truncate">
+                    {% if latest_record %}{{ latest_record.risk_tier }}{% else %}None yet{% endif %}
+                </div>
+                <div class="text-muted small">Most recent assessment</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="mc-card p-3">
+                <div class="text-muted small fw-semibold text-uppercase">Latest Model Score</div>
+                <div class="fs-2 fw-bold text-primary my-1">
+                    {% if latest_record %}{{ (latest_record.prediction_prob * 100)|round(1) }}%{% else %}--{% endif %}
+                </div>
+                <div class="text-muted small">Estimated indicator score</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="mc-card p-3">
+                <div class="text-muted small fw-semibold text-uppercase">Latest Stress Level</div>
+                <div class="fs-2 fw-bold text-warning my-1">
+                    {% if latest_record %}{{ latest_record.stress_level }} <span class="fs-6 text-muted fw-normal">/ 10</span>{% else %}--{% endif %}
+                </div>
+                <div class="text-muted small">Self-reported pressure</div>
+            </div>
+        </div>
+    </div>
+
+    {% if records %}
+    <!-- Chart: Screening Score Trend -->
+    <div class="mc-card p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold text-navy mb-0">
+                <i class="bi bi-graph-up text-primary me-2"></i>Screening Indicator & Stress Trends Over Time
+            </h5>
+            <span class="badge bg-light text-secondary border">Chart.js Visualization</span>
+        </div>
+        <div style="height: 300px;">
+            <canvas id="screeningTrendChart"></canvas>
+        </div>
+    </div>
+
+    <!-- History Table -->
+    <div class="mc-card p-4">
+        <h5 class="fw-bold text-navy mb-3">
+            <i class="bi bi-table text-primary me-2"></i>Historical Screening Records
+        </h5>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Timestamp</th>
+                        <th>Age / Gender</th>
+                        <th>Work Interference</th>
+                        <th>Self Stress</th>
+                        <th>Screening Tier</th>
+                        <th>Model Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in records %}
+                    <tr>
+                        <td class="fw-bold text-muted">{{ loop.index }}</td>
+                        <td>{{ r.created_at[:16] }}</td>
+                        <td>{{ r.age }} y/o &bull; {{ r.gender }}</td>
+                        <td><span class="badge bg-light text-dark border">{{ r.work_interfere }}</span></td>
+                        <td><span class="badge bg-warning text-dark">{{ r.stress_level }} / 10</span></td>
+                        <td>
+                            {% if 'Elevated' in r.risk_tier %}
+                                <span class="badge badge-elevated">{{ r.risk_tier }}</span>
+                            {% elif 'Moderate' in r.risk_tier %}
+                                <span class="badge badge-moderate">{{ r.risk_tier }}</span>
+                            {% else %}
+                                <span class="badge badge-low">{{ r.risk_tier }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="fw-bold text-primary">{{ (r.prediction_prob * 100)|round(1) }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- Empty State -->
+    <div class="mc-card p-5 text-center">
+        <div class="display-3 text-muted mb-3">
+            <i class="bi bi-clipboard-x"></i>
+        </div>
+        <h4 class="fw-bold text-navy mb-2">No Saved Screening Records Found</h4>
+        <p class="text-muted mx-auto mb-4" style="max-width: 480px;">
+            You have not completed any screenings in this session or opted not to save results. Take your first 3-minute screening to see personalized insights here.
+        </p>
+        <a href="{{ url_for('questionnaire') }}" class="btn btn-mindcare-primary">
+            <i class="bi bi-play-circle-fill me-1"></i> Start Screening Now
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+
+<!-- Delete History Confirmation Modal -->
+<div class="modal fade" id="deleteHistoryModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-danger" id="deleteModalLabel">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>Clear Screening History
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-3">
+                <p class="text-muted mb-0">
+                    Are you sure you want to permanently delete all saved screening records for this session? This action complies with local data privacy and cannot be undone.
+                </p>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action="{{ url_for('delete_history') }}" method="POST">
+                    <button type="submit" class="btn btn-sm btn-danger fw-bold">
+                        <i class="bi bi-trash3 me-1"></i> Yes, Delete All Records
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+{% if records %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const rawDates = {{ chart_dates|safe }};
+    const rawScores = {{ chart_scores|safe }};
+    const rawStress = {{ chart_stress|safe }};
+
+    const ctx = document.getElementById("screeningTrendChart");
+    if (ctx && rawDates.length > 0) {
+        new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: rawDates,
+                datasets: [
+                    {
+                        label: "ML Model Score (%)",
+                        data: rawScores,
+                        borderColor: "#6366F1",
+                        backgroundColor: "rgba(99, 102, 241, 0.1)",
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true,
+                        pointRadius: 5
+                    },
+                    {
+                        label: "Stress Level (Scaled 0-100)",
+                        data: rawStress,
+                        borderColor: "#D97706",
+                        backgroundColor: "transparent",
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        tension: 0.3,
+                        pointRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: { display: true, text: "Indicator Score (%)" }
+                    },
+                    x: {
+                        title: { display: true, text: "Assessment Timestamp" }
+                    }
+                },
+                plugins: {
+                    legend: { position: "top" }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endif %}
+{% endblock %}
+

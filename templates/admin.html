@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+
+{% block title %}Admin & Model Insights — MindCare AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+            <span class="badge bg-dark px-3 py-1 rounded-pill fw-semibold mb-1">
+                <i class="bi bi-shield-lock-fill me-1"></i>Local Demonstration Admin Panel
+            </span>
+            <h2 class="fw-bold text-navy mb-0">Model Insights & System Analytics</h2>
+            <p class="text-muted small mb-0">
+                Evaluation metrics, feature importance, dataset distributions, and local demonstration database telemetry.
+            </p>
+        </div>
+        <div class="badge bg-secondary-subtle text-secondary px-3 py-2 rounded-3 border">
+            <i class="bi bi-cpu me-1"></i> Scikit-Learn 1.9 &bull; Python 3.13
+        </div>
+    </div>
+
+    <!-- Demonstration Notice -->
+    <div class="disclaimer-banner mb-4">
+        <div class="d-flex align-items-start gap-2">
+            <i class="bi bi-shield-check text-primary fs-5 mt-1"></i>
+            <div>
+                <strong>Privacy-Preserving Telemetry:</strong>
+                This administrator dashboard displays strictly aggregated summary metrics and statistical models. <strong>No individual user answers, IP addresses, or personal responses are ever exposed or logged here.</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Telemetry Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-lg-3">
+            <div class="mc-card p-3">
+                <div class="text-muted small fw-semibold text-uppercase">Benchmark Dataset Size</div>
+                <div class="fs-2 fw-bold text-navy my-1">{{ metrics.dataset_info.total_samples }}</div>
+                <div class="text-muted small">Survey responses (OSMI)</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="mc-card p-3">
+                <div class="text-muted small fw-semibold text-uppercase">RF Test Accuracy</div>
+                <div class="fs-2 fw-bold text-success my-1">{{ (metrics.performance.accuracy * 100)|round(1) }}%</div>
+                <div class="text-muted small">Held-out test split (25%)</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="mc-card p-3">
+                <div class="text-muted small fw-semibold text-uppercase">Model ROC-AUC</div>
+                <div class="fs-2 fw-bold text-primary my-1">{{ metrics.performance.roc_auc }}</div>
+                <div class="text-muted small">Discrimination capability</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="mc-card p-3">
+                <div class="text-muted small fw-semibold text-uppercase">Local DB Screenings</div>
+                <div class="fs-2 fw-bold text-teal my-1" style="color: var(--teal-primary);">{{ db_stats.total_screenings }}</div>
+                <div class="text-muted small">Saved demonstration records</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row: Feature Importance & Confusion Matrix -->
+    <div class="row g-4 mb-4">
+        <!-- Feature Importance Chart -->
+        <div class="col-lg-7">
+            <div class="mc-card p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold text-navy mb-0">
+                        <i class="bi bi-bar-chart-fill text-primary me-2"></i>Random Forest Feature Importance
+                    </h5>
+                    <span class="badge bg-light text-secondary border">MDI Importance</span>
+                </div>
+                <p class="text-muted small mb-3">
+                    Gini importance derived from the Random Forest ensemble showing which attributes contributed most significantly to classification decisions.
+                </p>
+                <div style="height: 280px;">
+                    <canvas id="featureImportanceChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confusion Matrix & Metrics Grid -->
+        <div class="col-lg-5">
+            <div class="mc-card p-4 h-100">
+                <h5 class="fw-bold text-navy mb-3">
+                    <i class="bi bi-grid-3x3 text-primary me-2"></i>Test Confusion Matrix
+                </h5>
+                <p class="text-muted small mb-3">
+                    Evaluated on 315 held-out test samples (Stratified 25% split).
+                </p>
+
+                <div class="table-responsive text-center mb-3">
+                    <table class="table table-bordered align-middle">
+                        <thead>
+                            <tr class="table-light">
+                                <th style="width: 35%;">Actual \ Pred</th>
+                                <th style="width: 32%;" class="text-success">Predicted No</th>
+                                <th style="width: 33%;" class="text-danger">Predicted Yes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th class="table-light text-start">Actual No</th>
+                                <td class="bg-success-subtle fw-bold fs-5 text-success">
+                                    {{ metrics.performance.confusion_matrix.true_negative }}
+                                    <div class="text-muted small fw-normal">True Negatives</div>
+                                </td>
+                                <td class="bg-light fw-bold fs-5 text-secondary">
+                                    {{ metrics.performance.confusion_matrix.false_positive }}
+                                    <div class="text-muted small fw-normal">False Positives</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="table-light text-start">Actual Yes</th>
+                                <td class="bg-light fw-bold fs-5 text-secondary">
+                                    {{ metrics.performance.confusion_matrix.false_negative }}
+                                    <div class="text-muted small fw-normal">False Negatives</div>
+                                </td>
+                                <td class="bg-danger-subtle fw-bold fs-5 text-danger">
+                                    {{ metrics.performance.confusion_matrix.true_positive }}
+                                    <div class="text-muted small fw-normal">True Positives</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row g-2 text-center small">
+                    <div class="col-4">
+                        <div class="p-2 bg-light rounded border">
+                            <div class="text-muted">Precision</div>
+                            <div class="fw-bold text-dark">{{ (metrics.performance.precision * 100)|round(1) }}%</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="p-2 bg-light rounded border">
+                            <div class="text-muted">Recall</div>
+                            <div class="fw-bold text-dark">{{ (metrics.performance.recall * 100)|round(1) }}%</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="p-2 bg-light rounded border">
+                            <div class="text-muted">F1-Score</div>
+                            <div class="fw-bold text-dark">{{ (metrics.performance.f1_score * 100)|round(1) }}%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Comparison Table -->
+    <div class="mc-card p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold text-navy mb-0">
+                <i class="bi bi-clipboard2-data text-primary me-2"></i>Multi-Model Viva Comparative Evaluation
+            </h5>
+            <span class="badge bg-primary">5-Fold CV Mean: {{ (metrics.performance.cv_accuracy_mean * 100)|round(1) }}%</span>
+        </div>
+        <p class="text-muted small mb-3">
+            Comparison between the primary Random Forest ensemble and baseline classification models on identical test partitions.
+        </p>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Algorithm</th>
+                        <th>Test Accuracy</th>
+                        <th>F1-Score</th>
+                        <th>ROC-AUC</th>
+                        <th>Project Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for model_name, res in metrics.model_comparison.items() %}
+                    <tr {% if 'Random Forest' in model_name %}class="table-primary fw-semibold"{% endif %}>
+                        <td>
+                            {% if 'Random Forest' in model_name %}
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                            {% endif %}
+                            {{ model_name }}
+                        </td>
+                        <td>{{ (res.accuracy * 100)|round(2) }}%</td>
+                        <td>{{ res.f1_score }}</td>
+                        <td>{{ res.roc_auc }}</td>
+                        <td>
+                            {% if 'Random Forest' in model_name %}
+                                <span class="badge bg-primary">Primary Production Model</span>
+                            {% elif 'Logistic' in model_name %}
+                                <span class="badge bg-secondary">Linear Baseline</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Tree Baseline</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Dataset & Hyperparameter Metadata -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="mc-card p-4 h-100">
+                <h6 class="fw-bold text-navy text-uppercase mb-3">
+                    <i class="bi bi-database me-2 text-primary"></i>Dataset Specifications
+                </h6>
+                <ul class="list-unstyled small d-flex flex-column gap-2 mb-0">
+                    <li><strong>Source Dataset:</strong> OSMI Mental Health in Tech Benchmark Survey</li>
+                    <li><strong>Total Instances:</strong> 1,259 records (Stratified: 944 Train / 315 Test)</li>
+                    <li><strong>Target Variable:</strong> <code>treatment</code> (1 = Sought care, 0 = Did not seek)</li>
+                    <li><strong>Class Balance:</strong> 637 Treatment (50.6%) vs 622 Non-Treatment (49.4%)</li>
+                    <li><strong>Preprocessing Pipeline:</strong> Median imputation + StandardScaler (Numeric) & OneHotEncoder (Categorical)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mc-card p-4 h-100">
+                <h6 class="fw-bold text-navy text-uppercase mb-3">
+                    <i class="bi bi-sliders me-2 text-primary"></i>Tuned Hyperparameters
+                </h6>
+                <ul class="list-unstyled small d-flex flex-column gap-2 mb-0">
+                    <li><strong>n_estimators:</strong> 150 Decision Trees in Ensemble</li>
+                    <li><strong>max_depth:</strong> 7 (Regularized to prevent overfitting)</li>
+                    <li><strong>min_samples_split:</strong> 5 samples</li>
+                    <li><strong>min_samples_leaf:</strong> 2 samples</li>
+                    <li><strong>class_weight:</strong> balanced</li>
+                    <li><strong>Random Seed:</strong> 42 (100% reproducible training)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const fiLabels = {{ fi_labels|safe }};
+    const fiValues = {{ fi_values|safe }};
+
+    const ctx = document.getElementById("featureImportanceChart");
+    if (ctx && fiLabels.length > 0) {
+        new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: fiLabels,
+                datasets: [{
+                    label: "Relative Importance",
+                    data: fiValues,
+                    backgroundColor: [
+                        "#6366F1", "#0D9488", "#14B8A6", "#818CF8",
+                        "#A5B4FC", "#5EEAD4", "#CBD5E1", "#94A3B8"
+                    ],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: { display: true, text: "Gini Importance Score" }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
+

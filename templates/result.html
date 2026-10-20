@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}Screening Results — MindCare AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9 col-xl-8">
+
+            <!-- Result Header Card -->
+            <div class="result-gauge-card mb-4 position-relative">
+                <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill small fw-bold mb-3 {{ risk_meta.badge_class }}">
+                    <i class="bi bi-circle-fill" style="font-size: 0.6rem;"></i>
+                    {{ risk_meta.tier }}
+                </div>
+
+                <h2 class="fw-bold text-navy mb-2">{{ risk_meta.action_header }}</h2>
+                <p class="text-muted mx-auto" style="max-width: 580px;">
+                    {{ risk_meta.summary }}
+                </p>
+
+                <!-- Calibrated Probability Gauge -->
+                <div class="my-4">
+                    <div class="text-muted small text-uppercase fw-semibold letter-spacing-1 mb-1">
+                        Model Estimated Screening Indicator Score
+                    </div>
+                    <div class="score-display-number" style="color: {{ risk_meta.color }};">
+                        {{ prob_percentage }}<span class="fs-4 text-muted fw-normal">%</span>
+                    </div>
+
+                    <div class="score-progress-container mx-auto" style="max-width: 480px;">
+                        <div class="score-progress-bar" style="width: {{ prob_percentage }}%; background-color: {{ risk_meta.color }};"></div>
+                    </div>
+
+                    <div class="d-flex justify-content-between text-muted small mx-auto" style="max-width: 480px;">
+                        <span>0% (Routine Stability)</span>
+                        <span>50% (Moderate Threshold)</span>
+                        <span>100% (High Treatment Need Pattern)</span>
+                    </div>
+                </div>
+
+                <div class="alert alert-secondary py-2 px-3 small border-0 d-inline-block text-start mb-0">
+                    <i class="bi bi-info-circle-fill text-primary me-1"></i>
+                    <strong>What this score represents:</strong> This statistical estimate reflects how closely your inputs resemble survey respondents who sought mental health care in the OSMI benchmark dataset. It is <em>not</em> a medical probability of illness.
+                </div>
+            </div>
+
+            <!-- Mandatory Medical Disclaimer Banner -->
+            <div class="disclaimer-banner mb-4">
+                <div class="d-flex align-items-start gap-2">
+                    <i class="bi bi-exclamation-triangle-fill text-warning fs-5 mt-1"></i>
+                    <div>
+                        <strong class="text-dark d-block mb-1">Important Ethical & Clinical Disclaimer:</strong>
+                        This educational screening tool cannot diagnose mental health conditions. Results may be inaccurate and should not be used as the sole basis for health decisions. If you are concerned about your wellbeing, consider speaking with a qualified mental health professional.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tailored Next Steps Card -->
+            <div class="mc-card p-4 mb-4">
+                <h5 class="fw-bold text-navy mb-3">
+                    <i class="bi bi-compass-fill text-primary me-2"></i>Recommended Next Steps & Guidance
+                </h5>
+                <p class="text-muted mb-3">{{ risk_meta.recommendation }}</p>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3 bg-light border h-100">
+                            <h6 class="fw-bold mb-1"><i class="bi bi-chat-square-heart text-teal-primary me-2"></i>Open Dialogue</h6>
+                            <p class="text-muted small mb-0">
+                                Discuss academic or workplace stress with trusted colleagues, mentors, or student counseling cells early.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3 bg-light border h-100">
+                            <h6 class="fw-bold mb-1"><i class="bi bi-moon-stars text-lavender-primary me-2"></i>Sleep & Rest Routine</h6>
+                            <p class="text-muted small mb-0">
+                                Prioritize consistent 7-8 hour sleep schedules, especially during heavy assignment or project milestones.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency Helpline Callout -->
+            <div class="emergency-banner mb-4">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                    <div>
+                        <h5 class="mb-1"><i class="bi bi-telephone-fill me-2"></i>Need Immediate Support?</h5>
+                        <p class="small text-danger-emphasis mb-0">
+                            Free, confidential, 24/7 mental health crisis helplines are available right now.
+                        </p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="tel:14416" class="btn btn-danger btn-sm px-3 fw-bold">
+                            <i class="bi bi-telephone-outbound me-1"></i> Call 14416 (Tele-MANAS)
+                        </a>
+                        <a href="tel:18005990019" class="btn btn-outline-danger btn-sm px-3 fw-bold">
+                            Call KIRAN (1800-599-0019)
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Breakdown of Submitted Answers -->
+            <div class="mc-card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold text-navy mb-0">
+                        <i class="bi bi-list-check text-primary me-2"></i>Submitted Responses Summary
+                    </h5>
+                    <span class="badge bg-secondary-subtle text-secondary small">
+                        {% if record_id %}Saved to History (ID: #{{ record_id }}){% else %}Session Only (Ephemeral){% endif %}
+                    </span>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <h6 class="fw-bold text-primary small text-uppercase mb-2">Machine Learning Input Features</h6>
+                            <ul class="list-unstyled small mb-0 d-flex flex-column gap-1">
+                                <li><strong>Age:</strong> {{ record.age }} years</li>
+                                <li><strong>Gender:</strong> {{ record.gender }}</li>
+                                <li><strong>Family History:</strong> {{ record.family_history }}</li>
+                                <li><strong>Work/Study Interference:</strong> {{ record.work_interfere }}</li>
+                                <li><strong>Leave Request Flexibility:</strong> {{ record.leave }}</li>
+                                <li><strong>Care Options Aware:</strong> {{ record.care_options }}</li>
+                                <li><strong>Mental Health Benefits:</strong> {{ record.benefits }}</li>
+                                <li><strong>Anonymity Protection:</strong> {{ record.anonymity }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <h6 class="fw-bold text-teal small text-uppercase mb-2">Holistic Lifestyle Self-Check</h6>
+                            <ul class="list-unstyled small mb-0 d-flex flex-column gap-1">
+                                <li><strong>Self-Reported Stress (1-10):</strong> {{ record.stress_level }} / 10</li>
+                                <li><strong>Sleep Quality:</strong> {{ record.sleep_quality }}</li>
+                                <li><strong>Perceived Workload:</strong> {{ record.workload }}</li>
+                            </ul>
+                            <div class="mt-3 p-2 bg-white rounded border small text-muted">
+                                <i class="bi bi-check2-circle text-teal-primary me-1"></i>
+                                These contextual lifestyle factors support holistic reflection and are not conflated with the core model features.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons (Print / Retake / Explore) -->
+            <div class="d-flex flex-wrap gap-3 justify-content-center no-print">
+                <button type="button" class="btn btn-mindcare-outline" onclick="printReport()">
+                    <i class="bi bi-printer-fill me-1"></i> Print / Save as PDF
+                </button>
+                <a href="{{ url_for('resources') }}" class="btn btn-mindcare-teal">
+                    <i class="bi bi-book-half me-1"></i> View Wellness Resources
+                </a>
+                <a href="{{ url_for('questionnaire') }}" class="btn btn-mindcare-primary">
+                    <i class="bi bi-arrow-repeat me-1"></i> Retake Screening
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+

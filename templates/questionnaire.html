@@ -1,0 +1,467 @@
+{% extends "base.html" %}
+
+{% block title %}Screening Questionnaire — MindCare AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9 col-xl-8">
+
+            <!-- Title & Instructions -->
+            <div class="text-center mb-4">
+                <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-semibold mb-2">
+                    <i class="bi bi-shield-check me-1"></i>Private & Confidential
+                </span>
+                <h2 class="fw-bold text-navy">Wellness & Risk Screening Questionnaire</h2>
+                <p class="text-muted small mx-auto" style="max-width: 620px;">
+                    Please answer the questions below as honestly as possible. Your responses help the machine learning model assess patterns associated with mental wellbeing and institutional support.
+                </p>
+            </div>
+
+            <!-- Stepper Progress Bar -->
+            <div class="stepper-progress">
+                <div class="stepper-progress-bar" id="stepperProgressBar" style="width: 0%;"></div>
+            </div>
+
+            <!-- Stepper Nodes -->
+            <div class="step-indicator">
+                <div class="step-node active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <span>Demographics</span>
+                </div>
+                <div class="step-node" data-step="2">
+                    <div class="step-circle">2</div>
+                    <span>Environment</span>
+                </div>
+                <div class="step-node" data-step="3">
+                    <div class="step-circle">3</div>
+                    <span>Support</span>
+                </div>
+                <div class="step-node" data-step="4">
+                    <div class="step-circle">4</div>
+                    <span>Lifestyle</span>
+                </div>
+                <div class="step-node" data-step="5">
+                    <div class="step-circle">5</div>
+                    <span>Review</span>
+                </div>
+            </div>
+
+            <!-- Questionnaire Card -->
+            <div class="mc-card p-4 p-md-5" id="questionnaireCard">
+                <form id="questionnaireForm" action="{{ url_for('predict') }}" method="POST">
+
+                    <!-- ========================================== -->
+                    <!-- STEP 1: Background & Demographics          -->
+                    <!-- ========================================== -->
+                    <div class="form-step-panel" data-step="1">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="badge bg-primary fs-6 rounded-circle">1</span>
+                            <h4 class="fw-bold mb-0">Background & Demographics</h4>
+                        </div>
+                        <p class="text-muted small mb-4">
+                            These basic factors allow the model to evaluate demographic patterns established in the training survey data.
+                        </p>
+
+                        <!-- Age -->
+                        <div class="mb-4">
+                            <label for="ageInput" class="form-label fw-bold">1. What is your age? <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control form-control-lg" id="ageInput" name="age" placeholder="e.g. 21" min="18" max="100" required>
+                            <div class="form-text">Must be between 18 and 100 years.</div>
+                            <div class="text-danger small mt-1 d-none" id="ageError"></div>
+                        </div>
+
+                        <!-- Gender -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold d-block">2. Gender Identity <span class="text-danger">*</span></label>
+                            <div class="row g-2">
+                                <div class="col-sm-6">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="gender" id="gender_male" value="Male" checked>
+                                        <label for="gender_male" class="mb-0 fw-medium w-100 cursor-pointer">Male</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="gender" id="gender_female" value="Female">
+                                        <label for="gender_female" class="mb-0 fw-medium w-100 cursor-pointer">Female</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="gender" id="gender_nb" value="Non-binary / Other">
+                                        <label for="gender_nb" class="mb-0 fw-medium w-100 cursor-pointer">Non-binary / Other</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="gender" id="gender_pns" value="Prefer not to say">
+                                        <label for="gender_pns" class="mb-0 fw-medium w-100 cursor-pointer">Prefer not to say</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Family History -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold d-block">3. Do you have a family history of mental health conditions? <span class="text-danger">*</span></label>
+                            <div class="row g-2">
+                                <div class="col-sm-6">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="family_history" id="fh_no" value="No" checked>
+                                        <label for="fh_no" class="mb-0 fw-medium w-100 cursor-pointer">No</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="family_history" id="fh_yes" value="Yes">
+                                        <label for="fh_yes" class="mb-0 fw-medium w-100 cursor-pointer">Yes</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end mt-4 pt-3 border-top">
+                            <button type="button" class="btn btn-mindcare-primary btn-next-step">
+                                Continue to Environment <i class="bi bi-arrow-right ms-1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- STEP 2: Work & Study Context               -->
+                    <!-- ========================================== -->
+                    <div class="form-step-panel d-none" data-step="2">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="badge bg-primary fs-6 rounded-circle">2</span>
+                            <h4 class="fw-bold mb-0">Work & Study Environment</h4>
+                        </div>
+                        <p class="text-muted small mb-4">
+                            Mental wellbeing directly interacts with productivity and institutional leave flexibility.
+                        </p>
+
+                        <!-- Work Interfere -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold d-block">4. If you experience mental health strain, how often does it interfere with your work or studies? <span class="text-danger">*</span></label>
+                            <div class="row g-2">
+                                <div class="col-sm-6">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="work_interfere" id="wi_never" value="Never">
+                                        <label for="wi_never" class="mb-0 fw-medium w-100 cursor-pointer">Never</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="work_interfere" id="wi_rarely" value="Rarely">
+                                        <label for="wi_rarely" class="mb-0 fw-medium w-100 cursor-pointer">Rarely</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="work_interfere" id="wi_sometimes" value="Sometimes" checked>
+                                        <label for="wi_sometimes" class="mb-0 fw-medium w-100 cursor-pointer">Sometimes</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="work_interfere" id="wi_often" value="Often">
+                                        <label for="wi_often" class="mb-0 fw-medium w-100 cursor-pointer">Often</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="work_interfere" id="wi_dontknow" value="Don't know">
+                                        <label for="wi_dontknow" class="mb-0 fw-medium w-100 cursor-pointer">Not sure / Prefer not to say</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Leave Flexibility -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold d-block">5. How easy is it for you to take medical or mental health leave if needed? <span class="text-danger">*</span></label>
+                            <div class="row g-2">
+                                <div class="col-sm-6">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="leave" id="leave_veasy" value="Very easy">
+                                        <label for="leave_veasy" class="mb-0 fw-medium w-100 cursor-pointer">Very easy</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="leave" id="leave_seasy" value="Somewhat easy" checked>
+                                        <label for="leave_seasy" class="mb-0 fw-medium w-100 cursor-pointer">Somewhat easy</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="leave" id="leave_sdiff" value="Somewhat difficult">
+                                        <label for="leave_sdiff" class="mb-0 fw-medium w-100 cursor-pointer">Somewhat difficult</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="leave" id="leave_vdiff" value="Very difficult">
+                                        <label for="leave_vdiff" class="mb-0 fw-medium w-100 cursor-pointer">Very difficult</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="leave" id="leave_dontknow" value="Don't know">
+                                        <label for="leave_dontknow" class="mb-0 fw-medium w-100 cursor-pointer">Don't know</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                            <button type="button" class="btn btn-mindcare-outline btn-prev-step">
+                                <i class="bi bi-arrow-left me-1"></i> Back
+                            </button>
+                            <button type="button" class="btn btn-mindcare-primary btn-next-step">
+                                Continue to Support <i class="bi bi-arrow-right ms-1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- STEP 3: Support & Resources                -->
+                    <!-- ========================================== -->
+                    <div class="form-step-panel d-none" data-step="3">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="badge bg-primary fs-6 rounded-circle">3</span>
+                            <h4 class="fw-bold mb-0">Organizational & Wellness Support</h4>
+                        </div>
+                        <p class="text-muted small mb-4">
+                            Awareness of support programs and psychological safety significantly influence coping ability.
+                        </p>
+
+                        <!-- Care Options -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold d-block">6. Do you know what mental health care options your institution or employer provides? <span class="text-danger">*</span></label>
+                            <div class="row g-2">
+                                <div class="col-sm-4">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="care_options" id="co_yes" value="Yes">
+                                        <label for="co_yes" class="mb-0 fw-medium w-100 cursor-pointer">Yes</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="care_options" id="co_no" value="No" checked>
+                                        <label for="co_no" class="mb-0 fw-medium w-100 cursor-pointer">No</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="care_options" id="co_notsure" value="Not sure">
+                                        <label for="co_notsure" class="mb-0 fw-medium w-100 cursor-pointer">Not sure</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Benefits -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold d-block">7. Does your institution provide mental health benefits / insurance coverage? <span class="text-danger">*</span></label>
+                            <div class="row g-2">
+                                <div class="col-sm-4">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="benefits" id="ben_yes" value="Yes">
+                                        <label for="ben_yes" class="mb-0 fw-medium w-100 cursor-pointer">Yes</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="benefits" id="ben_no" value="No">
+                                        <label for="ben_no" class="mb-0 fw-medium w-100 cursor-pointer">No</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="benefits" id="ben_dk" value="Don't know" checked>
+                                        <label for="ben_dk" class="mb-0 fw-medium w-100 cursor-pointer">Don't know</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Anonymity -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold d-block">8. Is your anonymity protected if you choose to take advantage of mental health resources? <span class="text-danger">*</span></label>
+                            <div class="row g-2">
+                                <div class="col-sm-4">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="anonymity" id="anon_yes" value="Yes">
+                                        <label for="anon_yes" class="mb-0 fw-medium w-100 cursor-pointer">Yes</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="anonymity" id="anon_no" value="No">
+                                        <label for="anon_no" class="mb-0 fw-medium w-100 cursor-pointer">No</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="anonymity" id="anon_dk" value="Don't know" checked>
+                                        <label for="anon_dk" class="mb-0 fw-medium w-100 cursor-pointer">Don't know</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                            <button type="button" class="btn btn-mindcare-outline btn-prev-step">
+                                <i class="bi bi-arrow-left me-1"></i> Back
+                            </button>
+                            <button type="button" class="btn btn-mindcare-primary btn-next-step">
+                                Continue to Lifestyle Check <i class="bi bi-arrow-right ms-1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- STEP 4: Holistic Lifestyle & Wellness      -->
+                    <!-- ========================================== -->
+                    <div class="form-step-panel d-none" data-step="4">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge bg-teal-primary text-white fs-6 rounded-circle" style="background-color: var(--teal-primary);">4</span>
+                            <h4 class="fw-bold mb-0">Holistic Lifestyle & Self-Check</h4>
+                        </div>
+                        <div class="alert alert-info py-2 px-3 small border-0 mb-4">
+                            <i class="bi bi-info-circle-fill me-1"></i>
+                            <strong>Note on Responsible AI:</strong> These questions provide contextual wellness feedback. They are displayed for your self-reflection and are not mapped onto unsupported ML parameters.
+                        </div>
+
+                        <!-- Stress Level Slider -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label for="stress_level" class="form-label fw-bold mb-0">9. Self-Reported Daily Stress Level (1 = Minimal, 10 = Severe)</label>
+                                <span class="badge bg-primary fs-6 px-3 py-1 rounded-pill" id="stress_val_display">5</span>
+                            </div>
+                            <input type="range" class="form-range" id="stress_level" name="stress_level" min="1" max="10" value="5">
+                            <div class="d-flex justify-content-between text-muted small">
+                                <span>1 (Very Relaxed)</span>
+                                <span>5 (Moderate Pressure)</span>
+                                <span>10 (Overwhelming Stress)</span>
+                            </div>
+                        </div>
+
+                        <!-- Sleep Quality -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold d-block">10. How would you rate your recent sleep quality?</label>
+                            <div class="row g-2">
+                                <div class="col-sm-4">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="sleep_quality" id="sleep_good" value="Good">
+                                        <label for="sleep_good" class="mb-0 fw-medium w-100 cursor-pointer">Good (7-9 hrs peaceful)</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="sleep_quality" id="sleep_fair" value="Fair" checked>
+                                        <label for="sleep_fair" class="mb-0 fw-medium w-100 cursor-pointer">Fair (Occasional disruption)</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="sleep_quality" id="sleep_poor" value="Poor">
+                                        <label for="sleep_poor" class="mb-0 fw-medium w-100 cursor-pointer">Poor (Insomnia / fatigue)</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Workload / Academic Pressure -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold d-block">11. Perceived Academic or Workload Pressure</label>
+                            <div class="row g-2">
+                                <div class="col-sm-4">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="workload" id="wl_manageable" value="Manageable" checked>
+                                        <label for="wl_manageable" class="mb-0 fw-medium w-100 cursor-pointer">Manageable</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="workload" id="wl_heavy" value="Heavy">
+                                        <label for="wl_heavy" class="mb-0 fw-medium w-100 cursor-pointer">Heavy</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="option-select-card">
+                                        <input type="radio" name="workload" id="wl_overwhelming" value="Overwhelming">
+                                        <label for="wl_overwhelming" class="mb-0 fw-medium w-100 cursor-pointer">Overwhelming</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                            <button type="button" class="btn btn-mindcare-outline btn-prev-step">
+                                <i class="bi bi-arrow-left me-1"></i> Back
+                            </button>
+                            <button type="button" class="btn btn-mindcare-primary btn-next-step">
+                                Review & Confirm <i class="bi bi-arrow-right ms-1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- STEP 5: Review Answers & Consent           -->
+                    <!-- ========================================== -->
+                    <div class="form-step-panel d-none" data-step="5">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="badge bg-success fs-6 rounded-circle">5</span>
+                            <h4 class="fw-bold mb-0">Review Answers & Informed Consent</h4>
+                        </div>
+                        <p class="text-muted small mb-3">
+                            Please verify your submitted responses below before generating the machine learning screening insights.
+                        </p>
+
+                        <!-- Dynamic Review Container -->
+                        <div class="p-3 bg-light rounded-3 border mb-4" id="reviewContentArea">
+                            <div class="text-center py-3 text-muted">Loading your responses...</div>
+                        </div>
+
+                        <!-- Consent & Privacy Checkboxes -->
+                        <div class="p-3 bg-white rounded-3 border mb-4">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" name="consent_saved" id="consent_saved" value="1" checked>
+                                <label class="form-check-label small" for="consent_saved">
+                                    <strong>Save this screening to my session history:</strong> Allows you to view your results in the Dashboard. You can delete saved records at any time. (Uncheck to keep completely ephemeral).
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="consent_disclaimer" required checked>
+                                <label class="form-check-label small text-muted" for="consent_disclaimer">
+                                    I acknowledge that MindCare AI is an educational demonstration prototype and <strong>not a medical diagnostic tool</strong>.
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                            <button type="button" class="btn btn-mindcare-outline btn-prev-step">
+                                <i class="bi bi-arrow-left me-1"></i> Back
+                            </button>
+                            <button type="submit" class="btn btn-mindcare-primary btn-lg px-4 shadow">
+                                <i class="bi bi-cpu-fill me-2"></i>Generate AI Screening Result
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Privacy Notice Footer -->
+            <div class="disclaimer-banner text-center mt-4">
+                <i class="bi bi-lock-fill text-teal-primary me-1"></i>
+                <strong>Privacy Commitment:</strong> No identifying data (name, email, phone) is requested or transmitted. All processing occurs locally.
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+

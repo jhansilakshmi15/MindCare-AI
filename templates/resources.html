@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+
+{% block title %}Wellness Resources & Crisis Support — MindCare AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+        <span class="badge bg-teal-light text-teal-primary px-3 py-2 rounded-pill fw-semibold mb-2" style="background-color: var(--teal-light); color: var(--teal-primary);">
+            <i class="bi bi-shield-heart-fill me-1"></i>Support & Resilience
+        </span>
+        <h2 class="fw-bold text-navy">Wellness Support & Emergency Resources</h2>
+        <p class="text-muted mx-auto" style="max-width: 650px;">
+            Evidence-based self-care strategies, cognitive grounding routines, and verified 24/7 crisis helplines to support your mental wellbeing journey.
+        </p>
+    </div>
+
+    <!-- Verified Helplines Callout (Top Priority) -->
+    <div class="emergency-banner mb-5">
+        <div class="row align-items-center g-3">
+            <div class="col-lg-8">
+                <div class="d-flex align-items-start gap-3">
+                    <div class="bg-danger text-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 52px; height: 52px;">
+                        <i class="bi bi-telephone-inbound-fill fs-4"></i>
+                    </div>
+                    <div>
+                        <h4 class="fw-bold text-danger mb-1">Immediate Crisis Support & 24/7 Helplines</h4>
+                        <p class="small text-danger-emphasis mb-0">
+                            If you or someone you know is going through emotional distress, panic, or thoughts of self-harm, please connect with trained compassionate counselors immediately. These services are free, confidential, and available 24/7.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="#helplineList" class="btn btn-danger fw-bold px-4">
+                    View Verified Contacts <i class="bi bi-arrow-down-short ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Self-Care & Wellbeing Pillars -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-6 col-lg-4">
+            <div class="mc-card h-100">
+                <div class="feature-icon-wrapper icon-lavender">
+                    <i class="bi bi-moon-stars-fill"></i>
+                </div>
+                <h5 class="fw-bold text-navy mb-2">Sleep Hygiene</h5>
+                <p class="text-muted small mb-3">
+                    Adequate sleep restores cognitive function and regulates emotional reactivity. Disrupted sleep compounds stress significantly.
+                </p>
+                <ul class="text-muted small ps-3 mb-0">
+                    <li>Maintain a consistent sleep-wake schedule, even on weekends.</li>
+                    <li>Avoid mobile and laptop screens 45 minutes before sleeping.</li>
+                    <li>Keep the room cool, dim, and quiet for deeper REM sleep.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="mc-card h-100">
+                <div class="feature-icon-wrapper icon-teal">
+                    <i class="bi bi-wind"></i>
+                </div>
+                <h5 class="fw-bold text-navy mb-2">Breathwork & Grounding</h5>
+                <p class="text-muted small mb-3">
+                    Controlled respiration activates the parasympathetic nervous system, lowering cortisol and heart rate within minutes.
+                </p>
+                <div class="p-3 bg-light rounded-3 border mb-3 small">
+                    <strong>Box Breathing Technique (4-4-4-4):</strong>
+                    <div class="mt-1 text-muted">Inhale (4s) &rarr; Hold (4s) &rarr; Exhale (4s) &rarr; Hold empty (4s). Repeat 4 cycles.</div>
+                </div>
+                <ul class="text-muted small ps-3 mb-0">
+                    <li>Practice the 5-4-3-2-1 sensory grounding exercise during acute anxiety.</li>
+                    <li>Take 3 deep physiological sighs (two quick inhales, slow exhale).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="mc-card h-100">
+                <div class="feature-icon-wrapper icon-navy">
+                    <i class="bi bi-activity"></i>
+                </div>
+                <h5 class="fw-bold text-navy mb-2">Physical Activity & Movement</h5>
+                <p class="text-muted small mb-3">
+                    Physical movement stimulates neurogenesis and releases endorphins that counteract chronic study fatigue.
+                </p>
+                <ul class="text-muted small ps-3 mb-0">
+                    <li>Aim for 20-30 minutes of moderate aerobic activity daily (brisk walk, cycling).</li>
+                    <li>Stand up and stretch every 60 minutes during long coding/study sessions.</li>
+                    <li>Get 10 minutes of direct morning sunlight to reset your circadian clock.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="mc-card h-100">
+                <div class="feature-icon-wrapper icon-teal">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <h5 class="fw-bold text-navy mb-2">Social Connections</h5>
+                <p class="text-muted small mb-3">
+                    Isolation magnifies perceived difficulties. Meaningful interpersonal sharing creates psychological buffer zones.
+                </p>
+                <ul class="text-muted small ps-3 mb-0">
+                    <li>Schedule regular coffee breaks with trusted friends or peer group.</li>
+                    <li>Talk openly about engineering deadlines without competitive pressure.</li>
+                    <li>Engage in collaborative study circles rather than isolating when stuck.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="mc-card h-100">
+                <div class="feature-icon-wrapper icon-lavender">
+                    <i class="bi bi-journal-check"></i>
+                </div>
+                <h5 class="fw-bold text-navy mb-2">Workload & Exam Pressure</h5>
+                <p class="text-muted small mb-3">
+                    Proactive project breakdown prevents deadline panic and mental exhaustion.
+                </p>
+                <ul class="text-muted small ps-3 mb-0">
+                    <li>Use the Pomodoro framework (25 mins focused work, 5 mins true rest).</li>
+                    <li>Decompose massive final-year project deliverables into daily milestones.</li>
+                    <li>Set clear evening boundaries: stop answering work emails past 9:00 PM.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="mc-card h-100">
+                <div class="feature-icon-wrapper icon-navy">
+                    <i class="bi bi-heart-pulse"></i>
+                </div>
+                <h5 class="fw-bold text-navy mb-2">Professional Psychological Care</h5>
+                <p class="text-muted small mb-3">
+                    Seeking therapy is a proactive, strength-based decision, comparable to seeing a doctor for physical injuries.
+                </p>
+                <ul class="text-muted small ps-3 mb-0">
+                    <li>University counseling cells provide free, confidential student guidance.</li>
+                    <li>Therapy equips you with personalized Cognitive Behavioral Therapy (CBT) tools.</li>
+                    <li>Early consultation prevents mild stress from escalating into chronic burnout.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Verified Helplines Directory -->
+    <div class="mc-card p-4 p-md-5 mb-5" id="helplineList">
+        <div class="d-flex align-items-center gap-2 mb-4">
+            <i class="bi bi-patch-check-fill text-primary fs-3"></i>
+            <div>
+                <h3 class="fw-bold text-navy mb-0">Verified Mental Health Crisis Helplines</h3>
+                <p class="text-muted small mb-0">Official government and accredited non-profit helplines verified for accuracy.</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- India Helplines -->
+            <div class="col-lg-6">
+                <div class="p-3 rounded-3 bg-light border h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="fw-bold text-navy mb-0">National Helplines (India)</h5>
+                        <span class="badge bg-success">Toll-Free & 24/7</span>
+                    </div>
+                    <p class="text-muted small mb-3">Recommended for students and citizens across all states in India.</p>
+
+                    <div class="list-group list-group-flush small">
+                        <div class="list-group-item bg-transparent px-0 py-2">
+                            <div class="fw-bold text-dark">Tele-MANAS (Govt. of India & NIMHANS)</div>
+                            <div class="text-muted">Comprehensive tele-mental health services in 20+ languages.</div>
+                            <div class="mt-1">
+                                <a href="tel:14416" class="btn btn-sm btn-outline-danger py-0 px-2 fw-bold">14416</a>
+                                <span class="text-muted mx-1">or</span>
+                                <a href="tel:18008914416" class="btn btn-sm btn-outline-danger py-0 px-2">1800-891-4416</a>
+                            </div>
+                        </div>
+
+                        <div class="list-group-item bg-transparent px-0 py-2">
+                            <div class="fw-bold text-dark">KIRAN (Ministry of Social Justice)</div>
+                            <div class="text-muted">Dedicated mental health rehabilitation and early screening support.</div>
+                            <div class="mt-1">
+                                <a href="tel:18005990019" class="btn btn-sm btn-outline-primary py-0 px-2 fw-bold">1800-599-0019</a>
+                            </div>
+                        </div>
+
+                        <div class="list-group-item bg-transparent px-0 py-2">
+                            <div class="fw-bold text-dark">Vandrevala Foundation</div>
+                            <div class="text-muted">Free, 24/7 professional psychological counseling.</div>
+                            <div class="mt-1">
+                                <a href="tel:+919999666555" class="btn btn-sm btn-outline-secondary py-0 px-2 fw-bold">+91 9999 666 555</a>
+                            </div>
+                        </div>
+
+                        <div class="list-group-item bg-transparent px-0 py-2">
+                            <div class="fw-bold text-dark">NIMHANS Center for Well-Being</div>
+                            <div class="text-muted">Specialized psychiatric and psychological consultation (Bengaluru).</div>
+                            <div class="mt-1">
+                                <a href="tel:08046110007" class="btn btn-sm btn-outline-secondary py-0 px-2">080-46110007</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- International Helplines -->
+            <div class="col-lg-6">
+                <div class="p-3 rounded-3 bg-light border h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="fw-bold text-navy mb-0">International Emergency Contacts</h5>
+                        <span class="badge bg-secondary">Global Crisis Lines</span>
+                    </div>
+                    <p class="text-muted small mb-3">For international students, remote workers, or global users.</p>
+
+                    <div class="list-group list-group-flush small">
+                        <div class="list-group-item bg-transparent px-0 py-2">
+                            <div class="fw-bold text-dark">United States & Canada — 988 Lifeline</div>
+                            <div class="text-muted">Free, 24/7 suicide prevention and mental health crisis lifeline.</div>
+                            <div class="mt-1">
+                                <a href="tel:988" class="btn btn-sm btn-outline-danger py-0 px-2 fw-bold">Call / Text 988</a>
+                            </div>
+                        </div>
+
+                        <div class="list-group-item bg-transparent px-0 py-2">
+                            <div class="fw-bold text-dark">Crisis Text Line (US / UK / Canada)</div>
+                            <div class="text-muted">Text with a trained crisis counselor 24/7.</div>
+                            <div class="mt-1">
+                                <span class="badge bg-light text-dark border">Text HOME to 741741</span>
+                            </div>
+                        </div>
+
+                        <div class="list-group-item bg-transparent px-0 py-2">
+                            <div class="fw-bold text-dark">United Kingdom — NHS 111 Mental Health</div>
+                            <div class="text-muted">Free urgent mental health advice and triage.</div>
+                            <div class="mt-1">
+                                <a href="tel:111" class="btn btn-sm btn-outline-primary py-0 px-2 fw-bold">Call 111</a>
+                            </div>
+                        </div>
+
+                        <div class="list-group-item bg-transparent px-0 py-2">
+                            <div class="fw-bold text-dark">Befrienders Worldwide</div>
+                            <div class="text-muted">International directory of volunteer emotional support centers.</div>
+                            <div class="mt-1">
+                                <a href="https://www.befrienders.org" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-secondary py-0 px-2">
+                                    Visit befrienders.org <i class="bi bi-box-arrow-up-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ethical Disclaimer Reminder -->
+    <div class="disclaimer-banner text-center">
+        <i class="bi bi-info-circle-fill text-primary me-1"></i>
+        <strong>Educational Boundary:</strong> MindCare AI does not prescribe medication, conduct therapy, or store crisis conversation transcripts. In any acute crisis, always dial your local emergency services (112 in India, 911 in North America, 999 in UK).
+    </div>
+
+</div>
+{% endblock %}
+

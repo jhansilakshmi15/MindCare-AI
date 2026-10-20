@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}MindCare AI — Understand Your Wellbeing{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center text-lg-start">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <div class="hero-pill">
+                    <i class="bi bi-shield-check"></i>
+                    <span>Educational Machine Learning Prototype &bull; Privacy-Focused</span>
+                </div>
+                <h1 class="hero-title">
+                    Understand Your Wellbeing. <br>
+                    <span class="text-primary" style="background: linear-gradient(135deg, #6366F1, #0D9488); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        Take the Next Step.
+                    </span>
+                </h1>
+                <p class="hero-lead">
+                    MindCare AI is an intelligent screening and support platform designed to help students and professionals identify early mental health strain patterns through evidence-informed machine learning.
+                </p>
+                <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+                    <a href="{{ url_for('questionnaire') }}" class="btn btn-mindcare-primary btn-lg px-4 shadow-sm">
+                        <i class="bi bi-play-circle-fill me-2"></i>Start Screening
+                    </a>
+                    <a href="{{ url_for('resources') }}" class="btn btn-mindcare-outline btn-lg px-4">
+                        <i class="bi bi-book-half me-2"></i>Explore Wellness Resources
+                    </a>
+                </div>
+                <div class="d-flex align-items-center gap-4 mt-4 pt-2 text-muted small justify-content-center justify-content-lg-start">
+                    <div><i class="bi bi-lock-fill text-success me-1"></i> 100% Anonymous by Default</div>
+                    <div><i class="bi bi-clock-history text-primary me-1"></i> 3-Minute Questionnaire</div>
+                    <div><i class="bi bi-cpu-fill text-teal me-1"></i> Random Forest ML Model</div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="mc-card p-4 shadow-lg border-0" style="background: linear-gradient(145deg, #ffffff, #f1f5f9);">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-2 rounded-pill">
+                            <i class="bi bi-award-fill me-1"></i>B.Tech Capstone Project
+                        </span>
+                        <span class="badge bg-success-subtle text-success fw-semibold px-3 py-2 rounded-pill">
+                            <i class="bi bi-check2-circle me-1"></i>Local Live Demo
+                        </span>
+                    </div>
+                    <h5 class="fw-bold text-navy mb-2">Evidence-Based Architecture</h5>
+                    <p class="text-muted small mb-3">
+                        Trained on benchmark mental health survey data using Scikit-Learn Random Forest ensemble classification to predict wellness support needs.
+                    </p>
+                    <div class="p-3 bg-white rounded-3 border mb-3">
+                        <div class="d-flex justify-content-between small fw-semibold text-secondary mb-1">
+                            <span>Random Forest Model Accuracy</span>
+                            <span class="text-primary fw-bold">~80% Test Accuracy</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="d-flex justify-content-between small text-muted mt-2">
+                            <span>ROC-AUC: <strong>0.88</strong></span>
+                            <span>Cross-Validation: <strong>82.8%</strong></span>
+                        </div>
+                    </div>
+                    <div class="small text-muted fst-italic">
+                        <i class="bi bi-info-circle me-1 text-primary"></i>
+                        Built strictly with transparent Python, Flask, Pandas, and Scikit-Learn without black-box APIs or commercial tracking.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Three Feature Cards -->
+<section class="py-5">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <h6 class="text-uppercase text-primary fw-bold letter-spacing-1">Core Capabilities</h6>
+            <h2 class="fw-bold text-navy">Designed for Privacy, Clarity, and Support</h2>
+            <p class="text-muted mx-auto" style="max-width: 650px;">
+                Combining machine learning pattern recognition with empathetic, non-judgmental guidance.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="mc-card h-100">
+                    <div class="feature-icon-wrapper icon-teal">
+                        <i class="bi bi-shield-lock-fill"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Private Screening</h4>
+                    <p class="text-muted mb-3">
+                        Your privacy is protected by design. We do not ask for names, email addresses, phone numbers, or IP tracking. You can screen completely anonymously.
+                    </p>
+                    <ul class="list-unstyled text-muted small d-flex flex-column gap-2 mb-0">
+                        <li><i class="bi bi-check-circle-fill text-teal-primary me-2"></i>No mandatory account registration</li>
+                        <li><i class="bi bi-check-circle-fill text-teal-primary me-2"></i>Explicit user consent for saving records</li>
+                        <li><i class="bi bi-check-circle-fill text-teal-primary me-2"></i>One-click history deletion</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="mc-card h-100">
+                    <div class="feature-icon-wrapper icon-lavender">
+                        <i class="bi bi-cpu-fill"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">AI-Assisted Insights</h4>
+                    <p class="text-muted mb-3">
+                        Powered by a supervised Random Forest Classifier trained on workplace and educational mental health responses to detect subtle risk indicators.
+                    </p>
+                    <ul class="list-unstyled text-muted small d-flex flex-column gap-2 mb-0">
+                        <li><i class="bi bi-check-circle-fill text-primary me-2"></i>Calibrated probabilistic risk tiering</li>
+                        <li><i class="bi bi-check-circle-fill text-primary me-2"></i>Transparent feature importance</li>
+                        <li><i class="bi bi-check-circle-fill text-primary me-2"></i>Non-stigmatizing screening language</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="mc-card h-100">
+                    <div class="feature-icon-wrapper icon-navy">
+                        <i class="bi bi-heart-pulse-fill"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Wellness Guidance</h4>
+                    <p class="text-muted mb-3">
+                        Receive practical self-care strategies, sleep hygiene tips, breathing exercises, and verified 24/7 mental health crisis helpline contacts.
+                    </p>
+                    <ul class="list-unstyled text-muted small d-flex flex-column gap-2 mb-0">
+                        <li><i class="bi bi-check-circle-fill text-secondary me-2"></i>Grounding and Box-Breathing tools</li>
+                        <li><i class="bi bi-check-circle-fill text-secondary me-2"></i>Academic and workload stress tips</li>
+                        <li><i class="bi bi-check-circle-fill text-secondary me-2"></i>Verified national emergency lines (14416)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Three Step Process -->
+<section class="py-5 bg-white border-top border-bottom">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <h6 class="text-uppercase text-teal-primary fw-bold">Simple Workflow</h6>
+            <h2 class="fw-bold text-navy">How MindCare AI Works</h2>
+            <p class="text-muted mx-auto" style="max-width: 600px;">
+                Three structured steps to help you gauge your wellbeing and take informed action.
+            </p>
+        </div>
+
+        <div class="row g-4 align-items-center">
+            <div class="col-md-4 text-center">
+                <div class="p-4 rounded-4 bg-light h-100 border">
+                    <div class="badge rounded-circle bg-primary text-white fs-4 mb-3 d-inline-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
+                        1
+                    </div>
+                    <h5 class="fw-bold mb-2">Answer Questions</h5>
+                    <p class="text-muted small mb-0">
+                        Complete a guided 5-step questionnaire about background factors, work/academic strain, and institutional support.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 text-center">
+                <div class="p-4 rounded-4 bg-light h-100 border">
+                    <div class="badge rounded-circle bg-teal text-white fs-4 mb-3 d-inline-flex align-items-center justify-content-center" style="width: 54px; height: 54px; background-color: var(--teal-primary);">
+                        2
+                    </div>
+                    <h5 class="fw-bold mb-2">View Screening Insights</h5>
+                    <p class="text-muted small mb-0">
+                        The trained Random Forest model evaluates patterns against benchmark data and computes an objective screening score.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 text-center">
+                <div class="p-4 rounded-4 bg-light h-100 border">
+                    <div class="badge rounded-circle bg-dark text-white fs-4 mb-3 d-inline-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
+                        3
+                    </div>
+                    <h5 class="fw-bold mb-2">Explore Support</h5>
+                    <p class="text-muted small mb-0">
+                        Review tailored wellness recommendations, download or print your summary report, or access verified emergency helplines.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{{ url_for('questionnaire') }}" class="btn btn-mindcare-primary btn-lg px-5">
+                Start Screening Now <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Responsible AI & Medical Disclaimer Section -->
+<section class="py-5">
+    <div class="container py-4">
+        <div class="mc-card border-primary-subtle bg-light p-4 p-md-5">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-2 text-center text-lg-start">
+                    <div class="display-3 text-primary">
+                        <i class="bi bi-shield-exclamation"></i>
+                    </div>
+                </div>
+                <div class="col-lg-10">
+                    <h4 class="fw-bold text-navy mb-2">Responsible AI & Clinical Boundaries</h4>
+                    <p class="text-muted mb-3">
+                        MindCare AI is an educational technology demonstration. Machine learning models identify statistical correlations within survey training data; <strong>they do not possess clinical diagnostic authority, medical judgment, or psychological intuition</strong>.
+                    </p>
+                    <div class="row g-3 text-muted small">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start gap-2">
+                                <i class="bi bi-x-octagon-fill text-danger mt-1"></i>
+                                <span><strong>Not a Diagnosis:</strong> Predictions must never be interpreted as clinical diagnoses of depression, anxiety, or other mental disorders.</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start gap-2">
+                                <i class="bi bi-check-circle-fill text-success mt-1"></i>
+                                <span><strong>Professional Care First:</strong> If you feel overwhelmed, anxious, or distressed, please consult a certified mental health professional immediately.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

@@ -1,0 +1,113 @@
+{
+    "model_name": "Random Forest Classifier",
+    "timestamp": "2026-10-10 17:51:37",
+    "dataset_info": {
+        "total_samples": 1259,
+        "train_samples": 944,
+        "test_samples": 315,
+        "features_used": [
+            "Age",
+            "Gender",
+            "family_history",
+            "work_interfere",
+            "benefits",
+            "care_options",
+            "anonymity",
+            "leave"
+        ],
+        "target_variable": "treatment",
+        "class_distribution": {
+            "Treatment_Yes": 637,
+            "Treatment_No": 622
+        }
+    },
+    "performance": {
+        "accuracy": 0.7968,
+        "precision": 0.7654,
+        "recall": 0.8616,
+        "f1_score": 0.8107,
+        "roc_auc": 0.8754,
+        "cv_accuracy_mean": 0.8284,
+        "cv_accuracy_std": 0.0069,
+        "confusion_matrix": {
+            "true_negative": 114,
+            "false_positive": 42,
+            "false_negative": 22,
+            "true_positive": 137
+        }
+    },
+    "feature_importances": [
+        {
+            "feature": "work_interfere_Don't know",
+            "importance": 0.2487
+        },
+        {
+            "feature": "work_interfere_Sometimes",
+            "importance": 0.1311
+        },
+        {
+            "feature": "family_history_No",
+            "importance": 0.0992
+        },
+        {
+            "feature": "work_interfere_Never",
+            "importance": 0.0924
+        },
+        {
+            "feature": "family_history_Yes",
+            "importance": 0.0816
+        },
+        {
+            "feature": "work_interfere_Often",
+            "importance": 0.0645
+        },
+        {
+            "feature": "Age",
+            "importance": 0.0458
+        },
+        {
+            "feature": "care_options_Yes",
+            "importance": 0.0391
+        },
+        {
+            "feature": "work_interfere_Rarely",
+            "importance": 0.0238
+        },
+        {
+            "feature": "benefits_Yes",
+            "importance": 0.0237
+        },
+        {
+            "feature": "Gender_Male",
+            "importance": 0.0155
+        },
+        {
+            "feature": "care_options_No",
+            "importance": 0.0143
+        }
+    ],
+    "model_comparison": {
+        "Logistic Regression": {
+            "accuracy": 0.8349,
+            "f1_score": 0.8462,
+            "roc_auc": 0.8891
+        },
+        "Decision Tree": {
+            "accuracy": 0.8127,
+            "f1_score": 0.829,
+            "roc_auc": 0.8587
+        },
+        "Random Forest (Primary)": {
+            "accuracy": 0.7968,
+            "f1_score": 0.8107,
+            "roc_auc": 0.8754
+        }
+    },
+    "hyperparameters": {
+        "n_estimators": 150,
+        "max_depth": 7,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+        "class_weight": "balanced"
+    }
+}
